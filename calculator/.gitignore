@@ -1,0 +1,10 @@
+calculator.sln
+calculator.vcxproj
+calculator.vcxproj.filters
+calculator.vcxproj.user
+.vs/
+x64/
+task.txt
+plugins/funccos
+plugins/funcsin
+plugins/funcdeg
