@@ -1,33 +1,24 @@
 #pragma once
-
-#include <iostream>
-#include <map>
-#include <functional>
-#include <iostream>
-#include <stack>
-#include <cctype>
-#include <algorithm>
-#include <string>
-#include <cmath>
-#include <sstream>
-#include <vector>
+#include "loader.h"
 
 class operations {
 private:
 	std::map<std::string, std::function<double(double, double)>> operators;
-	std::map<char, int> operatorsPrecedence;
-	std::map<std::string, std::string> funcAbbreviaton;
+	std::map<std::string, unaryf> functionsU;
+	std::map<std::string, binaryf> functionsB;
+
+	std::map<std::string, int> operationsPrecedence;
+
+	loader DLL;
+
 public:
 	operations();
-	~operations() = default;
-	operations(const operations& A) = default;
-	operations(operations&&) = default;
-	operations& operator = (const operations& A) = default;
-	operations& operator = (operations&&) = default;
 
-	int getKeyCoincidence(const char& token);
-	int getPrecedence(const char& token);
-	std::string getInterp(std::string& token);
+	int getKeyCoincidence(std::string token, int i);
+	int getPrecedence(std::string token);
+	int Xnarity(const std::string& token);
 
-	double evaluate(double const& a, double const& b, std::string const& name);
+	double Oevaluate(const double& a, const double& b, const std::string& name);
+	double FUevaluate(const double& a, std::string name);
+	double FBevaluate(const double& a, const double& b, std::string name);
 };

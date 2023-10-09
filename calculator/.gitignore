@@ -8,3 +8,5 @@ task.txt
 plugins/funccos
 plugins/funcsin
 plugins/funcdeg
+plugins/funcln
+plugins/functg

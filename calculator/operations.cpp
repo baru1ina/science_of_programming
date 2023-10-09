@@ -12,43 +12,48 @@ operations::operations() {
 	};
 
 
-	operatorsPrecedence.insert(std::make_pair('(', 0)); //left parenth 
-	operatorsPrecedence.insert(std::make_pair(')', 0)); //right parenth
+	operationsPrecedence.insert(std::make_pair("(", 0)); //left parenth 
+	operationsPrecedence.insert(std::make_pair(")", 0)); //right parenth
 
-	operatorsPrecedence.insert(std::make_pair('+', 1)); //binary op-n sum
-	operatorsPrecedence.insert(std::make_pair('-', 1)); //binary op-n sub
+	operationsPrecedence.insert(std::make_pair("+", 1)); //binary op-n sum
+	operationsPrecedence.insert(std::make_pair("-", 1)); //binary op-n sub
 
-	operatorsPrecedence.insert(std::make_pair('*', 2)); //binary op-n mult
-	operatorsPrecedence.insert(std::make_pair('/', 2)); //binary op-n div
+	operationsPrecedence.insert(std::make_pair("*", 2)); //binary op-n mult
+	operationsPrecedence.insert(std::make_pair("/", 2)); //binary op-n div
 
-	operatorsPrecedence.insert(std::make_pair('^', 3)); //binary op-n deg
-
-	operatorsPrecedence.insert(std::make_pair('~', 4)); //unary '-'
-
-	operatorsPrecedence.insert(std::make_pair('s', 4)); //unary op-n sin
-	operatorsPrecedence.insert(std::make_pair('c', 4)); //unary op-n cos
-	operatorsPrecedence.insert(std::make_pair('t', 4)); //unary op-n tg
-	operatorsPrecedence.insert(std::make_pair('l', 4)); //unary op-n ln
+	operationsPrecedence.insert(std::make_pair("~", 4)); //unary '-'
 
 
-	funcAbbreviaton.insert(std::make_pair("s", "sin")); //unary op-n sin // dll funcs
-	funcAbbreviaton.insert(std::make_pair("c", "cos")); //unary op-n cos
-	funcAbbreviaton.insert(std::make_pair("t", "tg")); //unary op-n tg
-	funcAbbreviaton.insert(std::make_pair("l", "ln")); //unary op-n ln
+	DLL.loadDll(operationsPrecedence, functionsU, functionsB); // plugins
+} 
+
+int operations::getKeyCoincidence(std::string token, int i) { 
+	if (i == 1) return this->operators.count(token);
+	else if (i == 2) return this->functionsU.count(token) + this->functionsB.count(token);
+	else throw std::string{ "unexpected operation!" };
 }
 
-int operations::getKeyCoincidence(const char& token) { return this->operatorsPrecedence.count(token); }
-
-int operations::getPrecedence(const char& token) {
-	if (this->operatorsPrecedence.find(token) != operatorsPrecedence.end()) return (this->operatorsPrecedence.find(token)->second);
-	else throw std::string{ "unknown operator" };
+int operations::getPrecedence(std::string token) {
+	if (this->operationsPrecedence.find(token) != operationsPrecedence.end())
+		return (this->operationsPrecedence.find(token)->second);
 }
 
-std::string operations::getInterp(std::string& token) {
-	if (this->funcAbbreviaton.find(token) != funcAbbreviaton.end()) return (this->funcAbbreviaton.find(token)->second);
-	else throw std::string{ "unknown function" };
+int operations::Xnarity(const std::string& token) {
+	if (this->functionsU.find(token) != functionsU.end())
+		return 1;
+	else if (this->functionsB.find(token) != functionsB.end())
+		return 2;
+	return 0;
 }
 
-double operations::evaluate(double const& a, double const& b, std::string const& name) { 
+double operations::Oevaluate(const double& a, const double& b, const std::string& name) {
 	return operators[name](a, b); 
+}
+
+double operations::FUevaluate(const double& a, std::string name) {
+	return functionsU[name](a);
+}
+
+double operations::FBevaluate(const double& a, const double& b, std::string name) {
+	return functionsB[name](a, b);
 }
