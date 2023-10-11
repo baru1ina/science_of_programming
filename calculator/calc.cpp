@@ -35,18 +35,16 @@ std::string calc::pickFunc(int& ptr, const std::string& input) {
 }
 
 bool calc::operatorCheck(std::string token) {
-	if (myOperations.getKeyCoincidence(token, 1) != 0) return true;
-	else return false;
+	return (myOperations.getKeyCoincidence(token, 1) != 0);
 }
 
 bool calc::funcCheck(std::string token) {
-	if (myOperations.getKeyCoincidence(token, 2) != 0) return true;
-	else return false;
+	return (myOperations.getKeyCoincidence(token, 2) != 0);
 }
 
-void calc::toPostfix(const std::string& input) { 
+void calc::toPostfix(const std::string& input_) { 
 
-	this->input = delSpace(input);
+	input = delSpace(input_);
 	
 	std::vector<std::string> postfixVec;
 	std::stack<std::string> operators;
@@ -98,9 +96,9 @@ void calc::calculate(const std::string& input) {
 	std::stack<double> result;
 	int iterCount = 0;
 
-	for (int i = 0; i < parsedVec.size(); i++) {
-		std::string token = parsedVec[i];
-		if (isdigit(token[0])) result.push(std::stod(token)); 
+	for (const auto token : parsedVec) {
+		if (isdigit(token[0]))
+			result.push(std::stod(token)); 
 		else if (operatorCheck(token) || token == "~") {
 			//    operand1 | operator | operand2    //    -negativeNum    //
 			iterCount++;

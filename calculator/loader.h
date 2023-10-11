@@ -23,11 +23,16 @@ private:
 
 public:
 	loader() = default;
-
 	~loader() {
-		for (const auto& lib : libraries) FreeLibrary(lib);
+		for (const auto& lib : libraries)
+			FreeLibrary(lib);
 		libraries.clear();
 	}
+
+	loader(loader const&) = delete;
+	loader(loader&&) = delete;
+	loader operator=(loader const&) = delete;
+	loader operator=(loader&&) = delete;
 
 	void loadDll(std::map<std::string, int>& funcPrecedence,
 		std::map<std::string, unaryf>& functionsU,

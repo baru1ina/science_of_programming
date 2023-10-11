@@ -19,18 +19,23 @@ void loader::loadDll(std::map<std::string, int>& funcPrecedence,
 			std::function<std::string(void)> name = (std::string(*) (void)) GetProcAddress(load, "getName");
 			std::function<int(void)> precedence = (int(*) (void)) GetProcAddress(load, "getPrecedence");
 
-			funcPrecedence.insert(std::make_pair(name(), precedence()));
+			//funcPrecedence.insert(std::make_pair(name(), precedence()));
+			funcPrecedence[name()] = precedence();
 
 			unaryf funcU = nullptr;
 			binaryf funcB = nullptr;
 			funcU = (unaryf)GetProcAddress(load, "unaryf");
-			if (funcU != nullptr) functionsU.insert(std::make_pair(name(), funcU));
+			if (funcU != nullptr)
+				functionsU.insert(std::make_pair(name(), funcU));
 			else {
 				funcB = (binaryf)GetProcAddress(load, "binaryf");
-				if (funcB != nullptr) functionsB.insert(std::make_pair(name(), funcB));
-				else throw std::string{ "func not found!" };
+				if (funcB != nullptr)
+					functionsB.insert(std::make_pair(name(), funcB));
+				else
+					std::cerr << "file loading failure: " << example << std::endl;
 			}
 		}
-		else std::cerr << "file opening failure: " << example << " not found!" << std::endl;
+		else
+			std::cerr << "file loading failure: " << example << " not found!" << std::endl;
 	}
 }
