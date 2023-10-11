@@ -13,6 +13,10 @@ private:
 
 public:
 	operations();
+	operations(operations const&) = default;
+	operations(operations&&) = default;
+	operations& operator=(operations const&) = default;
+	operations& operator=(operations&&) = default;
 
 	size_t getKeyCoincidence(std::string token, int i);
 	int getPrecedence(std::string token);

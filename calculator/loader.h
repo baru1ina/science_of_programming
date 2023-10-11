@@ -29,10 +29,10 @@ public:
 		libraries.clear();
 	}
 
-	loader(loader const&) = delete;
-	loader(loader&&) = delete;
-	loader operator=(loader const&) = delete;
-	loader operator=(loader&&) = delete;
+	loader(loader const&) = default;
+	loader(loader&&) = default;
+	loader& operator=(loader const&) = default;
+	loader& operator=(loader&&) = default;
 
 	void loadDll(std::map<std::string, int>& funcPrecedence,
 		std::map<std::string, unaryf>& functionsU,

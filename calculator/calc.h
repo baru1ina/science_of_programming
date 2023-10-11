@@ -11,8 +11,6 @@ private:
 	std::vector<std::string> parsedVec;
 	
 public:
-	calc() = default;
-
 	std::string getOutput() { return this->output; }
 
 	bool operatorCheck(std::string token);
