@@ -59,12 +59,6 @@ void calc::toPostfix(const std::string& input) {
 		else if (isalpha(token)) {
 			operators.push(pickFunc(i, this->input));
 		}
-		/*else if (funcCheck(token)) {
-
-			operators.push(token);
-			if (token == 's' || token == 'c') i += 3;
-			else if (token == 'l' || token == 't') i += 2;
-		}*/
 		else if (token == '(') {
 			operators.push(toString(token)); i++;
 		}
@@ -85,6 +79,10 @@ void calc::toPostfix(const std::string& input) {
 			operators.push(toString(token));
 			i++;
 		}
+		else {
+			std::cout << "unexpected token: " << token << std::endl;
+			throw std::string{ "functionality not suppored: has no sutable operator!" };
+		}
 	}
 	while (!operators.empty()) {
 		postfixVec.push_back(toString(operators.top()));
@@ -92,16 +90,9 @@ void calc::toPostfix(const std::string& input) {
 	} 
 
 	this->parsedVec = postfixVec;
-	this->sampleOperators = operators;
-
-	for (int i = 0; i < parsedVec.size(); i++) {
-		std::cout << parsedVec[i];
-	}
-	std::cout << std::endl;
 }
 
 void calc::calculate(const std::string& input) {
-
 	toPostfix(input);
 
 	std::stack<double> result;
@@ -111,7 +102,7 @@ void calc::calculate(const std::string& input) {
 		std::string token = parsedVec[i];
 		if (isdigit(token[0])) result.push(std::stod(token)); 
 		else if (operatorCheck(token) || token == "~") {
-			//    operand1 | operator | operand2    //
+			//    operand1 | operator | operand2    //    -negativeNum    //
 			iterCount++;
 			if (token == "~") {
 				double negativeNum = 0;
@@ -143,8 +134,13 @@ void calc::calculate(const std::string& input) {
 				std::cout << "[" << iterCount << "]  " << "(" << base << ")" << token << "(" << operand << ")" << " = " << result.top() << std::endl;
 			}
 		}
+		else {
+			std::cout << "unexpected token: " << token << std::endl;
+			throw std::string{ "functionality not suppored: has no sutable Dll's!" };
+		}
 	} 
 
 	this->output = toString(result.top());
-}
 
+	std::cout << "\nresult: " << this->output << std::endl;
+}

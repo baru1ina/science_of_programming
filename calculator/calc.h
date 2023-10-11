@@ -9,7 +9,6 @@ private:
 	operations myOperations;
 
 	std::vector<std::string> parsedVec;
-	std::stack<std::string> sampleOperators;
 	
 public:
 	calc() = default;

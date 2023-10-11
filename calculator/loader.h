@@ -18,7 +18,7 @@ typedef double(*binaryf) (double, double);
 
 class loader {
 private:
-	std::string path = "./plugins/";
+	std::filesystem::path path = "plugins";
 	std::vector<HINSTANCE> libraries;
 
 public:

@@ -27,22 +27,20 @@ operations::operations() {
 	DLL.loadDll(operationsPrecedence, functionsU, functionsB); // plugins
 } 
 
-int operations::getKeyCoincidence(std::string token, int i) { 
+size_t operations::getKeyCoincidence(std::string token, int i) { 
 	if (i == 1) return this->operators.count(token);
-	else if (i == 2) return this->functionsU.count(token) + this->functionsB.count(token);
-	else throw std::string{ "unexpected operation!" };
+	else return this->functionsU.count(token) + this->functionsB.count(token);
 }
 
 int operations::getPrecedence(std::string token) {
 	if (this->operationsPrecedence.find(token) != operationsPrecedence.end())
 		return (this->operationsPrecedence.find(token)->second);
+	return 0;
 }
 
 int operations::Xnarity(const std::string& token) {
-	if (this->functionsU.find(token) != functionsU.end())
-		return 1;
-	else if (this->functionsB.find(token) != functionsB.end())
-		return 2;
+	if (this->functionsU.find(token) != functionsU.end()) return 1;
+	else if (this->functionsB.find(token) != functionsB.end()) return 2;
 	return 0;
 }
 

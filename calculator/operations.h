@@ -14,7 +14,7 @@ private:
 public:
 	operations();
 
-	int getKeyCoincidence(std::string token, int i);
+	size_t getKeyCoincidence(std::string token, int i);
 	int getPrecedence(std::string token);
 	int Xnarity(const std::string& token);
 

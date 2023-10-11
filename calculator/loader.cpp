@@ -4,15 +4,15 @@ void loader::loadDll(std::map<std::string, int>& funcPrecedence,
 	std::map<std::string, unaryf>& functionsU,
 	std::map<std::string, binaryf>& functionsB)
 {
-	std::vector<std::filesystem::path> files;
-	for (const auto& entry : std::filesystem::directory_iterator(path))
+	std::vector<std::filesystem::path> files ;
+	for (const auto& entry : std::filesystem::directory_iterator(this->path))
 		if (entry.path().extension() == ".dll")
 			files.push_back(entry.path().c_str());
 
 	const wchar_t* widecFileName;
 	HINSTANCE load;
-	for (const auto& path : files) {
-		widecFileName = path.c_str();
+	for (const auto& example : files) {
+		widecFileName = example.c_str();
 		load = LoadLibraryW(widecFileName);
 		if (load) {
 			this->libraries.push_back(load);
@@ -31,6 +31,6 @@ void loader::loadDll(std::map<std::string, int>& funcPrecedence,
 				else throw std::string{ "func not found!" };
 			}
 		}
-		else std::cerr << "file opening failure: " << path << " not found!" << std::endl;
+		else std::cerr << "file opening failure: " << example << " not found!" << std::endl;
 	}
 }
