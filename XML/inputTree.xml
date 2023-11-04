@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root> value = 1
+	<child1> value = 2
+		<child1.1> value = 3
+		</child1.1>
+		<child1.2> value = 4
+		</child1.2>
+	</child1>
+	<child2> value = 5
+	</child2>
+	<child3> value = 6
+		<child3.1> value = 7
+		</child3.1>
+		<child3.2> value = 8
+			<child.3.2.1> value = 9
+			</child.3.2.1>
+		</child3.2>
+	</child3>
+</root>
