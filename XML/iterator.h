@@ -6,20 +6,28 @@ struct iterator {
 	using difference_type = std::ptrdiff_t;
 	using value_type = node;
 
-	using pointer = node*;
-	using reference = node&;
+	iterator(node* _ptr) : ptr(_ptr) {}
 
-	iterator(pointer _ptr) : ptr(_ptr) {}
+	node& operator*() const { return *ptr; }
 
-	reference operator*() const { return *ptr; }
-	pointer operator->() { return ptr; }
+	node* operator->() { return ptr; }
 
-	iterator& operator++() { ptr++; return *this; }
-	iterator operator++(int) { iterator tmp = *this; ++(*this); return tmp; }
+	iterator& operator++() {
+		this->ptr = this->ptr->prefix_inc();
+		return *this;
+	}
 
-	friend bool operator== (const iterator& a, const iterator& b) { return a.ptr == b.ptr; };
-	friend bool operator!= (const iterator& a, const iterator& b) { return a.ptr != b.ptr; };
+	iterator operator++(int) {
+		iterator tmp = *this; ++(*this); return tmp;
+	}
+
+	friend bool operator== (const iterator& a, const iterator& b) {
+		return a.ptr == b.ptr;
+	};
+	friend bool operator!= (const iterator& a, const iterator& b) {
+		return a.ptr != b.ptr;
+	}
 
 private:
-	pointer ptr;
+	node* ptr;
 };
