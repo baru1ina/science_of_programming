@@ -1,14 +1,12 @@
 #include "tree.h"
 
 iterator tree::begin() {
-	iterator itr(root.get());
+	iterator itr(root->begin());
 	return itr;
 }
 
-iterator tree::end() {
-	iterator itr(root.get());
-	itr = root->end();
-	return itr;
+iterator tree::end(){
+	return nullptr;
 }
 
 void tree::load(const std::string& infilename) {
@@ -64,37 +62,49 @@ void tree::load(const std::string& infilename) {
 	file.close();
 }
 
-void tree::save(std::shared_ptr<node> root, int hight, std::ofstream& outfilename) {
+void tree::save(std::shared_ptr<node> root,std::ofstream& outfilename, int hight) {
 	if (root == nullptr) exit(1);
 	std::string indent = "";
 	for (int i = 0; i < hight; i++)
 		indent += "\t";
 	outfilename << indent << "<" << root->getKey() << ">" << " value = " << root->getValue() << std::endl;
 	for (int ind = 0; ind < root->childrenSize(); ind++)
-		save(root->getChild(ind), hight + 1, outfilename);
+		save(root->getChild(ind), outfilename, hight + 1);
 	outfilename << indent << "</" << root->getKey() << ">" << std::endl;
 }
 
 iterator tree::findKey(const std::string& tagName) {
-	for (iterator itr = this->begin(), end = this->end(); itr != end; itr++)
-		if (itr->getKey() == tagName)
+	for (iterator itr = this->begin(), end = this->end(); itr != end; itr++) {
+		if (itr->getKey() == tagName) {
 			return itr;
+		}
+	}
 	throw std::runtime_error("no key coincidence found");
 }
 
 iterator tree::findValue(const std::string& tagValue) {
 	for (iterator itr = this->begin(), end = this->end(); itr != end; itr++)
-		if (itr->getValue() == tagValue)
+		if (itr->getValue() == tagValue) {
 			return itr;
+		}
 	throw std::runtime_error("no value coincidence found");
 }
 
-//iterator tree::add(const std::string& tagName, const std::string& tagValue, iterator& itr) {
-//}
-//
-//bool tree::erase(iterator& itr) {
-//}
+iterator tree::add(const std::string& tagName, const std::string& tagValue, iterator& itr) {
+	(*itr).add(tagName, tagValue);
+	int size = (*itr).childrenSize();
+	iterator newItr(itr->getChild(size - 1).get());
+	return newItr;
+}
 
+bool tree::erase(iterator& itr){
+	if (itr == root.get())
+		throw std::runtime_error("trying to erase the root");
+	else if (itr == nullptr)
+		throw std::runtime_error("tree is empty");
+	else (*itr).erase();
+	return true;
+	}
 
 void tree::print(std::shared_ptr<node> root, int hight) {
 	if (root == nullptr) exit(1);
@@ -105,14 +115,3 @@ void tree::print(std::shared_ptr<node> root, int hight) {
 	}
 }
 
-void save(std::shared_ptr<tree> tree, const std::string outfilename) {
-	std::ofstream file(outfilename);
-	if (!file)
-		throw std::runtime_error("file opening error\n");
-	if (!tree) {
-		throw std::runtime_error("tree's empty\n");
-	}
-	file << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
-	tree->save(tree->getRoot(), 0, file);
-	file.close();
-}

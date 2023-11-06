@@ -11,7 +11,7 @@ public:
 	iterator end();
 
 	void load(const std::string& infilename);
-	void save(std::shared_ptr<node> root, int hight, std::ofstream& outfilename);
+	void save(std::shared_ptr<node> root, std::ofstream& outfilename, int hight);
 
 	iterator findKey(const std::string& tagName);
 	iterator findValue(const std::string& tagValue);
@@ -20,11 +20,10 @@ public:
 	bool erase(iterator& itr);
 
 	std::shared_ptr<node> getRoot() { return this->root; };
+
 	void print(std::shared_ptr<node> root, int hight);
 	
 
 private:
 	std::shared_ptr<node> root;
 };
-
-void save(std::shared_ptr<tree> tree, const std::string outfilename);

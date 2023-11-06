@@ -11,34 +11,54 @@ node* node::begin() {
 }
 
 node* node::end() {
-    std::shared_ptr<node> endNode;
-    for (auto& child : children) {
-        (*child).print();
-      /*  if (child->childrenSize() == 0)
-            endNode = child;*/
-        child->end();
-        endNode = child;
-    }
-    return endNode.get();
+    return nullptr;
 }
 
-bool node::checkChildren(node* current) {
-    return true;
+node* node::bypass(node* current) { 
+    if (current->parent.lock().get() == nullptr)
+        current = nullptr;
+    else if (current->parent.lock()->childrenSize() > 1) {
+        for (int i = 0; i < current->parent.lock()->childrenSize(); i++) {
+            if (current == current->parent.lock()->getChild(i).get())
+                if (i + 1 <= current->parent.lock()->childrenSize() - 1) {
+                    current = current->parent.lock()->getChild(i + 1).get();
+                    break;
+                }
+                else 
+                    current = bypass(current->parent.lock().get());
+        }
+    }
+    else
+       current = bypass(current->parent.lock().get());
+    return current;
 }
 
 node* node::prefix_inc() {
     node* current = this;
-    if (current->parent.lock()->childrenSize() != 0) { 
-        for (int i = 0; i < current->parent.lock()->childrenSize(); i++) {
-            if (current == current->parent.lock()->getChild(i).get() && ((i + 1) <= current->parent.lock()->childrenSize())) {
-                current = current->parent.lock()->getChild(i + 1).get();
-            }
-            else {
-                current = current->parent.lock()->parent.lock()->prefix_inc();
-            }
+    if (current->childrenSize() != 0)
+        return current->getChild(0).get();
+    else 
+        return bypass(current);
+}
+
+void node::add(const std::string& tagName, const std::string& tagValue) {
+    std::shared_ptr<node> newNode(new node(tagName, tagValue));
+    children.push_back(newNode);
+    newNode->parent = shared_from_this();
+    //newNode->getParent()->print();
+}
+
+void node::erase() {
+    for (auto& child : children) {
+        child->parent = parent;
+        child->parent.lock()->push_back(child);
+    }
+    for (int ind = 0; ind < parent.lock()->children.size(); ind++) {
+        if (parent.lock()->children[ind].get() == this) {
+            parent.lock()->children.erase(parent.lock()->children.begin() + ind);
+            break;
         }
-    } 
-    return current;
+    }
 }
 
 void node::print() {
