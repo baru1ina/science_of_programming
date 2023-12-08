@@ -3,7 +3,7 @@
 int main(void) {
     Subject subj;
 
-	Wrapper wrapper(&subj, &Subject::f1, {{"arg1",0}, {"arg2",0}});
+	Wrapper wrapper(&subj, &Subject::f1, { {"arg1", 0}, {"arg2", 0} });
 
 	Engine engine;
 
