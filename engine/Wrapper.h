@@ -19,20 +19,9 @@ private:
 
 public:
     Wrapper(T* _subject, Func _func, std::unordered_map<std::string, int> _args) {
-        if (!_subject || !_func) {
-            throw std::runtime_error("nullptr instead of a method or object");
-        }
-        else {
-            subject = _subject;
-            function = _func;
-        }
-
+        subject = _subject;
+        function = _func;
         for (const auto& pair : _args) {
-            if (_args.count(pair.first) > 1) {
-                arguments.clear();
-                throw std::runtime_error("two arguments with the same name");
-            }
-
             arguments[pair.first] = pair.second;
         }
     }
@@ -43,24 +32,19 @@ public:
     }
 
     int execute(std::unordered_map<std::string, int> _args) {
-        for (const auto& pair : _args) {
+        try { 
             if (sizeof...(args) != _args.size()) {
-                throw std::runtime_error("invalid number of arguments");
+                throw std::runtime_error("invalid number of arguments\n");
             }
-            vals.push_back(pair.second);
-
-        }
-
-        int result;
-
-        try {
-            result = call(std::make_index_sequence<sizeof...(args)>{});
+            for (const auto& pair : _args) {
+                vals.push_back(pair.second);
+            }
+            int result = call(std::make_index_sequence<sizeof...(args)>{});
+            return result;
         }
         catch (std::exception& ex) {
             std::cout << ex.what();
         }
-        return result;
+        
     }
 };
-
-//std::unordered_map<std::string, int> args_

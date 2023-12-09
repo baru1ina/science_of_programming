@@ -1,8 +1,13 @@
 #include "Engine.h"
 
 int Engine::execute(const std::string& command, std::unordered_map<std::string, int> args) {
-    if (commands.find(command) == commands.end()) {
-        throw std::runtime_error("command not found");
+    try {
+        if (commands.find(command) == commands.end()) {
+            throw std::runtime_error("command not found\n");
+        }
+        return (commands.find(command)->second)(args);
     }
-    return (commands.find(command)->second)(args);
+    catch (std::exception& ex) {
+        std::cout << ex.what();
+    }
 }
